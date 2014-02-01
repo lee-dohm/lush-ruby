@@ -21,6 +21,7 @@ This effort was inspired by:
 * [fish][fish]
 * [A Unix Shell in Ruby][shell-in-ruby]
 * [pry][pry]
+* Every Unix shell ever made
 
 ## Copyright
 
