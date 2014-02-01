@@ -2,23 +2,33 @@
 
 require 'shellwords'
 
-BUILTINS = {
-  'cd' => lambda { |dir| Dir.chdir(dir) },
-  'exit' => lambda { |code = 0| exit(code.to_i) }
-}
+def main
+  loop do
+    $stdout.print(ENV['PROMPT'])
+    line = $stdin.gets.strip
+    command, *arguments = Shellwords.shellsplit(line)
 
-loop do
-  $stdout.print('-> ')
-  line = $stdin.gets.strip
-  command, *arguments = Shellwords.shellsplit(line)
+    if BUILTINS[command]
+      BUILTINS[command].call(*arguments)
+    else
+      pid = fork {
+        exec line
+      }
 
-  if BUILTINS[command]
-    BUILTINS[command].call(*arguments)
-  else
-    pid = fork {
-      exec line
-    }
-
-    Process.wait(pid)
+      Process.wait(pid)
+    end
   end
 end
+
+BUILTINS = {
+  'cd' => lambda { |dir| Dir.chdir(dir) },
+  'exit' => lambda { |code = 0| exit(code.to_i) },
+  'export' => lambda { |args|
+    key, value = args.split('=')
+    ENV[key] = value
+  }
+}
+
+ENV['PROMPT'] = '-> '
+
+main
