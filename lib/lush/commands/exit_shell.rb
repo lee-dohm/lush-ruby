@@ -5,6 +5,9 @@
 module Lush
   module Commands
     # Represents the `exit` built-in command.
+    #
+    # @see http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_21
+    #   POSIX shell exit command
     class ExitShell
       # Status to return to the operating system upon exit.
       attr_reader :status

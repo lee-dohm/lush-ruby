@@ -4,6 +4,7 @@
 
 require 'lush/commands/change_directory'
 require 'lush/commands/exit_shell'
+require 'lush/commands/export_variable'
 
 module Lush
   # Contains all built-in command definitions.

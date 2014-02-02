@@ -5,6 +5,9 @@
 module Lush
   module Commands
     # Represents the `cd` command.
+    #
+    # @see http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cd.html#top POSIX shell cd
+    #   command
     class ChangeDirectory
       # Directory to which to change upon executing.
       attr_reader :directory
