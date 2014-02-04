@@ -8,11 +8,13 @@ module Lush
     #
     # @see http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_22
     #   POSIX shell export command
-    class ExportVariable
+    class ExportVariable < Command
       # Environment to modify. Defaults to `ENV`.
       attr_writer :env
 
       def initialize(*args)
+        super(args)
+
         @env = ENV
         @args = args
       end

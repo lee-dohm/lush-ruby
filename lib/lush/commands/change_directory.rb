@@ -8,13 +8,15 @@ module Lush
     #
     # @see http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cd.html#top POSIX shell cd
     #   command
-    class ChangeDirectory
+    class ChangeDirectory < Command
       # Directory to which to change upon executing.
       attr_reader :directory
 
-      # @param path Directory to which to change.
-      def initialize(path)
-        @directory = path
+      # @param [Array<String>] args Arguments passed to the command.
+      def initialize(*args)
+        super(*args)
+
+        @directory = @args.first
       end
 
       # Executes the `cd` command.

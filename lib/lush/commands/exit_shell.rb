@@ -8,7 +8,7 @@ module Lush
     #
     # @see http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_21
     #   POSIX shell exit command
-    class ExitShell
+    class ExitShell < Command
       # Status to return to the operating system upon exit.
       attr_reader :status
 
