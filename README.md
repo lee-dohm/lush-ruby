@@ -1,6 +1,6 @@
 # `lush` - The Lifted Unix Shell
 
-> lush^2 |ləSH| informal<br/>
+> 2) lush |ləSH| informal<br/>
 > **noun**<br/>
 > a heavy drinker, esp. a habitual one.
 
