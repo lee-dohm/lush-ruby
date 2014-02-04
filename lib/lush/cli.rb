@@ -84,7 +84,7 @@ module Lush
 
     # Initializes the command-line prompt string.
     def init_prompt
-      ENV['PROMPT'] = '-> '
+      ENV['PROMPT'] = '=> '
     end
 
     # Displays the prompt.
