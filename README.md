@@ -1,4 +1,8 @@
-# `lush` - Lifted Unix Shell
+# `lush` - The Lifted Unix Shell
+
+> lush^2 |ləSH| informal<br/>
+> **noun**<br/>
+> a heavy drinker, esp. a habitual one.
 
 This is my custom Unix shell, written in [Ruby][ruby]. It is my intention to, over time, build a [POSIX-compatible shell][posix] with the following features:
 
