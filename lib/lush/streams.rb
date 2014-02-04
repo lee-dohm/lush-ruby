@@ -3,6 +3,7 @@
 #
 
 module Lush
+  # Encapsulates all the stream shuffling code for dealing with creating and managing pipelines.
   class Streams
     # Stream to use for `STDIN`.
     attr_reader :in
@@ -25,6 +26,10 @@ module Lush
     end
 
     # Updates the stream values to the next stage in the pipeline.
+    #
+    # The `pipe` parameter should be true if there is another command in the pipeline and a set of
+    # streams needs to be created to manage the pipeline. If the `pipe` parameter is false, then
+    # `STDOUT` is set to be used as the outbound stream.
     #
     # @param [Boolean] pipe Flag indicating if there is another pipeline segment.
     def next(pipe: false)

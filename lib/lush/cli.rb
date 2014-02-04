@@ -22,28 +22,13 @@ module Lush
       init_prompt
     end
 
-    # Starts the shell.
+    # Executes the REPL.
     def run
       loop do
         print_prompt
-        line = get_command_line
+        line = read_command_line
         commands = split_on_pipes(line)
-
-        streams = Streams.new
-
-        commands.each_with_index do |command, index|
-          program, *arguments = Shellwords.shellsplit(command)
-
-          if builtin?(program)
-            call_builtin(program, *arguments)
-          else
-            streams.next(pipe: index + 1 < commands.size)
-            spawn_program(program, *arguments, streams)
-            streams.close
-          end
-        end
-
-        Process.waitall
+        execute_commands(commands)
       end
     end
 
@@ -65,10 +50,35 @@ module Lush
       BUILTINS[program].call(*arguments)
     end
 
+    # rubocop:disable MethodLength
+
+    # Executes the list of commands.
+    #
+    # @param commands List of commands obtained from the command line.
+    def execute_commands(commands)
+      streams = Streams.new
+
+      commands.each_with_index do |command, index|
+        program, *arguments = Shellwords.shellsplit(command)
+
+        if builtin?(program)
+          call_builtin(program, *arguments)
+        else
+          streams.next(pipe: index + 1 < commands.size)
+          spawn_program(program, *arguments, streams)
+          streams.close
+        end
+      end
+
+      Process.waitall
+    end
+
+    # rubocop:enable MethodLength
+
     # Gets the command line from the user.
     #
     # @return [String] Command-line text to execute.
-    def get_command_line
+    def read_command_line
       $stdin.gets.strip
     end
 
