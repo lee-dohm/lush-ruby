@@ -9,12 +9,12 @@ module Lush
   class CLI
     # List of built in commands and their implementation.
     BUILTINS = {
-      'cd' => lambda { |dir| Dir.chdir(dir) },
-      'exit' => lambda { |code = 0| exit(code.to_i) },
-      'export' => lambda { |args|
+      'cd' => -> (dir) { Dir.chdir(dir) },
+      'exit' => -> (code = 0) { exit(code.to_i) },
+      'export' => lambda do |args|
         key, value = args.split('=')
         ENV[key] = value
-      }
+      end
     }
 
     # Creates a new instance of the `CLI` class.
@@ -66,7 +66,7 @@ module Lush
     # @param [String] program Name of the program to execute.
     # @return [Boolean] Flag indicating whether `program` is a built-in command.
     def builtin?(program)
-      BUILTINS.has_key?(program)
+      BUILTINS.key?(program)
     end
 
     # Executes a built-in command.
@@ -81,10 +81,12 @@ module Lush
     #
     # @param [String] program Name of the program to execute.
     # @param [Array<String>] arguments Arguments to supply to the program.
-    # @param [IO] fd_out IO object containing the file descriptor for the program to use as its STDOUT.
-    # @param [IO] fd_in IO object containing the file descriptor for the program to use as its STDIN.
+    # @param [IO] fd_out IO object containing the file descriptor for the program to use as its
+    #                    STDOUT.
+    # @param [IO] fd_in IO object containing the file descriptor for the program to use as its
+    #                   STDIN.
     def spawn_program(program, *arguments, fd_out, fd_in)
-      fork {
+      fork do
         unless fd_out == $stdout
           $stdout.reopen(fd_out)
           fd_out.close
@@ -96,7 +98,7 @@ module Lush
         end
 
         exec program, *arguments
-      }
+      end
     end
 
     # Splits a command line on pipe delimiters.
@@ -104,7 +106,7 @@ module Lush
     # @param [String] line Command line text.
     # @return [Array<String>] List of pipeline components.
     def split_on_pipes(line)
-      line.scan( /([^"'|]+)|["']([^"']+)["']/ ).flatten.compact
+      line.scan(/([^"'|]+)|["']([^"']+)["']/).flatten.compact
     end
   end
 end
