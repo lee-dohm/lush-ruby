@@ -7,6 +7,7 @@ require 'shellwords'
 module Lush
   # Handles the command-line interface of the shell.
   class CLI
+    # List of built in commands and their implementation.
     BUILTINS = {
       'cd' => lambda { |dir| Dir.chdir(dir) },
       'exit' => lambda { |code = 0| exit(code.to_i) },
@@ -16,6 +17,7 @@ module Lush
       }
     }
 
+    # Creates a new instance of the `CLI` class.
     def initialize
       ENV['PROMPT'] = '-> '
     end
