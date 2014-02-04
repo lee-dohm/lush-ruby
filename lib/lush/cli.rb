@@ -99,8 +99,9 @@ module Lush
     # @param [Streams] streams Set of streams to use for input and output.
     def spawn_program(program, *arguments, streams)
       fork do
-        streams.reopen_out
-        streams.reopen_in
+        # Must be done within the context of the fork to only reassign the standard streams in the
+        # subprocess.
+        streams.reopen
 
         exec program, *arguments
       end

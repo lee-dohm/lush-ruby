@@ -41,6 +41,14 @@ module Lush
       end
     end
 
+    # Updates the standard streams, if necessary.
+    def reopen
+      reopen_out
+      reopen_in
+    end
+
+    private
+
     # Updates `STDIN` to point to `in`, if necessary.
     def reopen_in
       unless @in == $stdin
