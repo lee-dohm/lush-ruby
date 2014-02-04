@@ -21,6 +21,7 @@ This effort was inspired by:
 * [fish][fish]
 * [A Unix Shell in Ruby][shell-in-ruby]
 * [pry][pry]
+* [The Shell Hater's Handbook][shell-haters]
 * Every Unix shell ever made
 
 ## Copyright
@@ -31,4 +32,5 @@ Copyright &copy; 2014 [Lee Dohm](http://www.lee-dohm.com), [Lifted Studios](http
 [posix]: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
 [pry]: http://pryrepl.org
 [ruby]: http://www.ruby-lang.org
+[shell-haters]: https://shellhaters.heroku.com/
 [shell-in-ruby]: http://www.jstorimer.com/blogs/workingwithcode/7766107-a-unix-shell-in-ruby
