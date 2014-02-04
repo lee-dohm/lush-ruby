@@ -4,4 +4,5 @@
 
 require 'lush/cli'
 require 'lush/commands'
+require 'lush/streams'
 require 'lush/version'
