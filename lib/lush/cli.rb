@@ -19,20 +19,17 @@ module Lush
 
     # Creates a new instance of the `CLI` class.
     def initialize
-      ENV['PROMPT'] = '-> '
+      init_prompt
     end
 
     # Starts the shell.
     def run
       loop do
-        $stdout.print(ENV['PROMPT'])
-        line = $stdin.gets.strip
-
+        print_prompt
+        line = get_command_line
         commands = split_on_pipes(line)
 
-        fd_in = $stdin
-        fd_out = $stdout
-        pipe = []
+        streams = Streams.new
 
         commands.each_with_index do |command, index|
           program, *arguments = Shellwords.shellsplit(command)
@@ -40,18 +37,9 @@ module Lush
           if builtin?(program)
             call_builtin(program, *arguments)
           else
-            if index + 1 < commands.size
-              pipe = IO.pipe
-              fd_out = pipe.last
-            else
-              fd_out = $stdout
-            end
-
-            spawn_program(program, *arguments, fd_out, fd_in)
-
-            fd_out.close unless fd_out == $stdout
-            fd_in.close unless fd_in == $stdin
-            fd_in = pipe.first
+            streams.next(pipe: index + 1 < commands.size)
+            spawn_program(program, *arguments, streams)
+            streams.close
           end
         end
 
@@ -77,25 +65,32 @@ module Lush
       BUILTINS[program].call(*arguments)
     end
 
+    # Gets the command line from the user.
+    #
+    # @return [String] Command-line text to execute.
+    def get_command_line
+      $stdin.gets.strip
+    end
+
+    # Initializes the command-line prompt string.
+    def init_prompt
+      ENV['PROMPT'] = '-> '
+    end
+
+    # Displays the prompt.
+    def print_prompt
+      $stdout.print(ENV['PROMPT'])
+    end
+
     # Executes the given program in a sub-process.
     #
     # @param [String] program Name of the program to execute.
     # @param [Array<String>] arguments Arguments to supply to the program.
-    # @param [IO] fd_out IO object containing the file descriptor for the program to use as its
-    #                    STDOUT.
-    # @param [IO] fd_in IO object containing the file descriptor for the program to use as its
-    #                   STDIN.
-    def spawn_program(program, *arguments, fd_out, fd_in)
+    # @param [Streams] streams Set of streams to use for input and output.
+    def spawn_program(program, *arguments, streams)
       fork do
-        unless fd_out == $stdout
-          $stdout.reopen(fd_out)
-          fd_out.close
-        end
-
-        unless fd_in == $stdin
-          $stdin.reopen(fd_in)
-          fd_in.close
-        end
+        streams.reopen_out
+        streams.reopen_in
 
         exec program, *arguments
       end
