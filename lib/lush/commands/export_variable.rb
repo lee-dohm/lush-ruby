@@ -12,11 +12,13 @@ module Lush
       # Environment to modify. Defaults to `ENV`.
       attr_writer :env
 
+      # Initializes a new instance of the `ExportVariable` class.
+      #
+      # @param [Array<String>] args Arguments passed to the command.
       def initialize(*args)
-        super(args)
+        super(*args)
 
         @env = ENV
-        @args = args
       end
 
       # Executes the command.
@@ -31,6 +33,8 @@ module Lush
         else
           set_variable
         end
+
+        nil
       end
 
       private

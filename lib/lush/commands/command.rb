@@ -14,6 +14,8 @@ module Lush
       end
 
       # Executes the command according to the arguments.
+      #
+      # @raise [NotImplementedError] Cannot execute this base class.
       def execute
         raise NotImplementedError, 'Cannot execute a base Command'
       end

@@ -20,10 +20,16 @@ module Lush
       end
 
       # Executes the `cd` command.
+      #
+      # @return [nil]
       def execute
-        Dir.chdir(@directory)
-      rescue Errno::ENOENT
-        $stderr.puts "ChangeDirectory: No such directory: #{@directory}"
+        begin
+          Dir.chdir(@directory)
+        rescue Errno::ENOENT
+          $stderr.puts "ChangeDirectory: No such directory: #{@directory}"
+        end
+
+        nil
       end
     end
   end

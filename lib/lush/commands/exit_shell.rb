@@ -12,12 +12,15 @@ module Lush
       # Status to return to the operating system upon exit.
       attr_reader :status
 
-      # @param status Status to return to the operating system upon exit.
+      # @param [Boolean, Fixnum] status Status to return to the operating system upon exit.
       def initialize(status = true)
         @status = status
       end
 
-      # Executes the command.
+      # Executes the `exit` command.
+      #
+      # @raise [SystemExit] Signal to exit the shell.
+      # @return [nil]
       def execute
         exit(@status)
       end

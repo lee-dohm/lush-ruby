@@ -7,14 +7,11 @@ require 'shellwords'
 module Lush
   # Handles the command-line interface of the shell.
   class CLI
-    # List of built in commands and their implementation.
+    # List of built in commands and Command class.
     BUILTINS = {
-      'cd' => -> (dir) { Dir.chdir(dir) },
-      'exit' => -> (code = 0) { exit(code.to_i) },
-      'export' => lambda do |args|
-        key, value = args.split('=')
-        ENV[key] = value
-      end
+      'cd' => Lush::Commands::ChangeDirectory,
+      'exit' => Lush::Commands::ExitShell,
+      'export' => Lush::Commands::ExportVariable
     }
 
     # Creates a new instance of the `CLI` class.
@@ -47,7 +44,8 @@ module Lush
     # @param [String] program Name of the program to execute.
     # @param [Array<String>] arguments Arguments for the program.
     def call_builtin(program, *arguments)
-      BUILTINS[program].call(*arguments)
+      command = BUILTINS[program].new(*arguments)
+      command.execute
     end
 
     # rubocop:disable MethodLength
@@ -84,7 +82,7 @@ module Lush
 
     # Initializes the command-line prompt string.
     def init_prompt
-      ENV['PROMPT'] = '=> '
+      ENV['PROMPT'] = '-> '
     end
 
     # Displays the prompt.
